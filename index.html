@@ -1,0 +1,23 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Busy Indicator</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+</head>
+
+<body>
+  <main role="main" class="container">
+    <div class="jumbotron">
+      <h1>Busy Indicator</h1>
+
+      <% if(isAvailable == true) {%>
+        <a href="/busy" class="btn btn-danger">Busy</a>
+      <% } else { %>
+        <a href="/available" class="btn btn-success">Available</a>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>
