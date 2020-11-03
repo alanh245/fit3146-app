@@ -1,9 +1,11 @@
 let {PythonShell} = require('python-shell');
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
+app.use(bodyParser.json());
 
 // Initialise LED strip by setting to available
 PythonShell.run('set_available.py', null, function (err, results) {
@@ -32,6 +34,31 @@ app.get('/available', function (req, res) {
     res.sendFile(__dirname + '/available.html')
 });
 
+app.post('/hook', function (req, res) {
+    console.log(req.body);
+    // Send OK back to Zoom webook server
+    res.status(200).end();
+    console.log(req.body.payload.object.presence_status)
+
+    // Parse json and store presence status string value
+    var status = req.body.payload.object.presence_status
+
+    // Only check if json received contains presence status
+    if (typeof status !== 'undefined') {
+        if (status=='Away' || status=='Available') {
+            // If the users status change to either Away or Available it means they can be disturbed
+            PythonShell.run('set_available.py', null, function (err, results) {
+                console.log(results);
+            });
+            isAvailable = true;
+        } else if (status=='Do_Not_Disturb') {
+            PythonShell.run('set_busy.py', null, function (err, results) {
+                console.log(results);
+            });
+            isAvailable = false;
+        }
+    }
+});
 
 app.listen(8080);
 console.log('App running at localhost:8080');
