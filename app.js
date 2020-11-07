@@ -52,6 +52,7 @@ app.post('/hook', function (req, res) {
             });
             isAvailable = true;
         } else if (status=='Do_Not_Disturb') {
+            // Users can manually change their status to Do Not Disturb or it will be automatically changed when joining a Meeting
             PythonShell.run('set_busy.py', null, function (err, results) {
                 console.log(results);
             });
